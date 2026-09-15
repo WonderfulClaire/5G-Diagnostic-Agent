@@ -13,6 +13,7 @@ from recipes.telelogs.env.telelogs_env import TeleLogsEnv
 from recipes.telelogs.constants import recommended_repairs
 from recipes.telelogs.prompts import build_agent_messages
 from .online_grpo import encode_prompt, log_probs
+from .token_weights import diagnosis_token_weights
 
 
 def tool_call(name, args):
@@ -76,8 +77,10 @@ def main():
     p.add_argument("--adapter")
     p.add_argument("--lr", type=float, default=1e-4)
     p.add_argument("--replay-kl", type=float, default=0.0)
+    p.add_argument("--diagnosis-weight", type=float, default=1.0)
     p.add_argument("--device", default="cuda:0")
     a = p.parse_args()
+    diagnosis_token_weights("", [], a.diagnosis_weight)
     torch.manual_seed(a.seed)
     torch.set_num_threads(4)
     rng = random.Random(a.seed)
@@ -103,13 +106,17 @@ def main():
     async def collect():
         for case in rows:
             async for messages, response, schemas in demonstrations(case):
+                response_text = response + tokenizer.eos_token
+                encoded = tokenizer(response_text, return_tensors="pt", add_special_tokens=False,
+                                    return_offsets_mapping=True)
+                weights = diagnosis_token_weights(response_text, encoded.offset_mapping[0].tolist(),
+                                                  a.diagnosis_weight)
                 samples.append(
                     (
                         encode_prompt(tokenizer, messages, schemas, a.device),
-                        tokenizer(
-                            response + tokenizer.eos_token, return_tensors="pt", add_special_tokens=False
-                        ).input_ids.to(a.device),
+                        encoded.input_ids.to(a.device),
                         case.get("curation", {}).get("status") == "accept",
+                        torch.tensor(weights, device=a.device),
                     )
                 )
 
@@ -126,6 +133,7 @@ def main():
                 "init_adapter": a.adapter,
                 "lr": a.lr,
                 "replay_kl": a.replay_kl,
+                "diagnosis_weight": a.diagnosis_weight,
                 "schedule": "four replay steps per new-data step" if replay and fresh else "uniform",
                 "steps": a.steps,
                 "examples": len(samples),
@@ -140,8 +148,9 @@ def main():
             sample = fresh[(step // 5) % len(fresh)] if step % 5 == 4 else replay[(step - step // 5) % len(replay)]
         else:
             sample = samples[step % len(samples)]
-        prefix, actions, is_new = sample
-        loss = -log_probs(model, prefix, actions).mean()
+        prefix, actions, is_new, weights = sample
+        action_log_probs = log_probs(model, prefix, actions)
+        loss = -(action_log_probs * weights).sum() / weights.sum()
         kl = torch.tensor(0.0, device=a.device)
         if reference is not None and not is_new:
             ids = torch.cat((prefix, actions), 1)
@@ -156,7 +165,8 @@ def main():
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1)
         optimizer.step()
-        row = {"step": step, "loss": float(loss.detach()), "replay_kl": float(kl.detach()), "is_new": is_new}
+        row = {"step": step, "loss": float(loss.detach()), "replay_kl": float(kl.detach()), "is_new": is_new,
+               "response_tokens": actions.numel(), "weighted_tokens": int((weights > 1).sum())}
         with (a.output / "metrics.jsonl").open("a") as out:
             out.write(json.dumps(row) + "\n")
         if step % 10 == 0:

@@ -20,6 +20,7 @@ def evaluate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
     tool_failures = 0
     iterations = 0
     by_suite: dict[str, list[float]] = defaultdict(list)
+    by_cardinality: dict[str, list[dict[str, Any]]] = defaultdict(list)
     true_positive = false_positive = false_negative = 0
 
     for row in rows:
@@ -28,6 +29,11 @@ def evaluate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         if not expected:
             raise ValueError(f"row {row.get('scenario_id', '?')} has no valid ground truth")
         score = set_f1(predicted, expected)
+        by_cardinality[str(len(expected))].append(
+            {"exact": int(predicted == expected), "f1": score,
+             "over": int(len(predicted) > len(expected)),
+             "under": int(len(predicted) < len(expected))}
+        )
         exact += int(predicted == expected)
         macro_f1 += score
         true_positive += len(predicted & expected)
@@ -55,6 +61,16 @@ def evaluate_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "avg_iterations": iterations / count,
         "accuracy_per_tool_call": exact / max(1, tool_calls),
         "suite_macro_f1": {suite: sum(scores) / len(scores) for suite, scores in sorted(by_suite.items())},
+        "by_root_cause_count": {
+            key: {
+                "samples": len(values),
+                "exact_match": sum(v["exact"] for v in values) / len(values),
+                "mean_sample_set_f1": sum(v["f1"] for v in values) / len(values),
+                "overprediction_rate": sum(v["over"] for v in values) / len(values),
+                "underprediction_rate": sum(v["under"] for v in values) / len(values),
+            }
+            for key, values in sorted(by_cardinality.items())
+        },
     }
 
 
