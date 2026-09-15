@@ -17,7 +17,11 @@
 
 [训练、工具恢复与飞轮联调](docs/LEARNING_LOOP.md) · [实验记录](reports/experiments/20260915/REPORT.md)
 
-后续可复核对照：[根因字段加权](reports/experiments/20260915-retention/REPORT.md) · [0.6B/1.7B容量与回训](reports/experiments/20260915-capacity/REPORT.md)。同时检查总准确率、单/多根因保留与工具错误；当前回训候选未通过验收，32条预先冻结测试仍未评测。
+最新[无编号泄漏课程对照](reports/experiments/20260915-verified-curriculum/REPORT.md)：固定1.7B模型和2048步，混合单/双故障课程在首次32条冻结合成测试上达到27/32，单故障课程对照为16/32；两者单故障均16/16、工具错误均0。收益来自课程SFT，不能归因于RL或视为真实网络效果。完整原始预测、来源分组bootstrap及版本门槛可复核。
+
+追加两个种子的配对复核均提高11/32；三个种子平均准确率44.79%→79.17%。其中seed123虽提高总分，仍因C7细分类别回退被门槛拒绝；不挑选最好种子作为普遍结论。
+
+旧协议调试对照：[根因字段加权](reports/experiments/20260915-retention/REPORT.md) · [0.6B/1.7B容量与回训](reports/experiments/20260915-capacity/REPORT.md)。这些记录受上方编号泄漏问题影响，保留用于追溯。
 
 [成对难负例与决策学习](reports/experiments/20260915-decision/REPORT.md)进一步对照决策SFT与SFT+DPO：DPO组合保留了8/8单故障，但双故障仍0/4，总正确数未超过初始模型，尚未通过版本验收。
 

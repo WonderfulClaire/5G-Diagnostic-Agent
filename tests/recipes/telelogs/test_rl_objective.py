@@ -56,3 +56,10 @@ def test_only_response_positions_contribute_to_training_loss():
     (-scores.mean()).backward()
     assert torch.equal(model.logits.grad[:, :2], torch.zeros(1, 2, 8))
     assert model.logits.grad[:, 2:].abs().sum() > 0
+
+def test_efficiency_requires_measured_cost_and_aligned_reward():
+    from recipes.telelogs.training.objective import learning_route
+    assert learning_route([.7, .9], [1, 1]) == 'audit_reward_only_variance'
+    assert learning_route([.7, .9], [1, 1], efficiency_costs=[7, 7]) == 'audit_reward_only_variance'
+    assert learning_route([.7, .9], [1, 1], efficiency_costs=[8, 6]) == 'efficiency_rl'
+    assert learning_route([.7, .9], [1, 1], efficiency_costs=[6, 8]) == 'audit_reward_efficiency_conflict'

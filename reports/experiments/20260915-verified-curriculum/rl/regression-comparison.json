@@ -1,0 +1,5 @@
+{
+  "same_root_cause_predictions": 32,
+  "samples": 32,
+  "scope": "Previously inspected set reused only as regression; not a fresh held-out test"
+}

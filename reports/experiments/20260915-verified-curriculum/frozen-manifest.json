@@ -1,0 +1,57 @@
+{
+  "sha256": "b769963f13c1e444c3da3f402e3ed9b20e8ee2f559441b534d5590900f71b79e",
+  "samples": 32,
+  "groups": 16,
+  "excluded_pairs": [
+    [
+      "C1",
+      "C2"
+    ],
+    [
+      "C1",
+      "C6"
+    ],
+    [
+      "C1",
+      "C8"
+    ],
+    [
+      "C2",
+      "C6"
+    ],
+    [
+      "C2",
+      "C7"
+    ],
+    [
+      "C2",
+      "C8"
+    ],
+    [
+      "C3",
+      "C6"
+    ],
+    [
+      "C3",
+      "C7"
+    ],
+    [
+      "C4",
+      "C7"
+    ],
+    [
+      "C4",
+      "C8"
+    ],
+    [
+      "C5",
+      "C6"
+    ],
+    [
+      "C5",
+      "C8"
+    ]
+  ],
+  "scope": "synthetic wording and combination transfer; not independent real-world data",
+  "policy": "Never mine, review, train on, or select hyperparameters using this test. After inspection it is a regression set for later rounds."
+}

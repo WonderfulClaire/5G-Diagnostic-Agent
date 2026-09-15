@@ -124,10 +124,12 @@ def train(args):
         episodes = []
         rewards = []
         correctness = []
+        efficiency_costs = []
         for member in range(args.group_size):
             pieces, reward, trace = asyncio.run(
                 sample_episode(model, tokenizer, case, args.device, args.max_steps, args.max_tokens)
             )
+            efficiency_costs.append(sum(len(t.get("info", {}).get("tool_calls", [])) for t in trace))
             finals = [c for t in trace for c in t.get("info", {}).get("tool_calls", []) if "predicted_root_causes" in c]
             pred = set(finals[-1]["predicted_root_causes"]) if finals else set()
             truth = set(case["ground_truth"])
@@ -149,11 +151,12 @@ def train(args):
                     + "\n"
                 )
         advantages, std = group_advantages(rewards)
-        route = learning_route(rewards, correctness)
+        route = learning_route(rewards, correctness, efficiency_costs=efficiency_costs)
         metrics = {
             "learning_route": route,
             "optimizer_updated": False,
             "correctness_scores": correctness,
+            "efficiency_costs": efficiency_costs,
             "step": step,
             "case_id": case["id"],
             "rewards": rewards,

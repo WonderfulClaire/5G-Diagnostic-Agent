@@ -1,0 +1,30 @@
+{
+  "samples": 32,
+  "exact_match": 0.40625,
+  "mean_sample_set_f1": 0.6979166666666669,
+  "macro_f1": 0.6979166666666669,
+  "micro_f1": 0.675,
+  "avg_tool_calls": 7.0,
+  "tool_call_failure_rate": 0.0,
+  "avg_iterations": 2.0,
+  "accuracy_per_tool_call": 0.05803571428571429,
+  "suite_macro_f1": {
+    "test": 0.6979166666666669
+  },
+  "by_root_cause_count": {
+    "1": {
+      "samples": 16,
+      "exact_match": 0.8125,
+      "mean_sample_set_f1": 0.8125,
+      "overprediction_rate": 0.0,
+      "underprediction_rate": 0.0
+    },
+    "2": {
+      "samples": 16,
+      "exact_match": 0.0,
+      "mean_sample_set_f1": 0.5833333333333333,
+      "overprediction_rate": 0.0,
+      "underprediction_rate": 1.0
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "sha256": {
+    "recipes/telelogs/training/online_grpo.py": "9c78ad2d139c073cae61e2c4a8f6f3c3201a04f0d179e38e2a8f538d7bafc36e",
+    "recipes/telelogs/training/objective.py": "aad0d0debbf0201511fe119c26772649a9f9d84dcbd496e51115c331db8260ea"
+  },
+  "steps": 8,
+  "group_size": 4,
+  "max_steps": 4,
+  "max_tokens": 512,
+  "seed": 42,
+  "lr": 1e-05,
+  "beta": 0.01,
+  "scope": "Training pairs from variant zero, no evaluation failures used to select training cases"
+}

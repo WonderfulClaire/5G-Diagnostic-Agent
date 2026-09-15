@@ -26,7 +26,32 @@ def action_loss(new_logp, old_logp, reference_logp, advantage, clip=0.2, beta=0.
     }
 
 
-def learning_route(rewards, correctness, epsilon=1e-6):
+
+def efficiency_route(rewards, costs, epsilon):
+    if max(rewards) - min(rewards) <= epsilon:
+        return "mastered_replay"
+    if costs is None or max(costs) - min(costs) <= epsilon:
+        return "audit_reward_only_variance"
+    conflict = any(
+        abs(costs[i] - costs[j]) > epsilon and abs(rewards[i] - rewards[j]) > epsilon
+        and (costs[i] - costs[j]) * (rewards[i] - rewards[j]) > 0
+        for i in range(len(rewards)) for j in range(i)
+    )
+    aligned = any(
+        abs(costs[i] - costs[j]) > epsilon and abs(rewards[i] - rewards[j]) > epsilon
+        and (costs[i] - costs[j]) * (rewards[i] - rewards[j]) < 0
+        for i in range(len(rewards)) for j in range(i)
+    )
+    return "audit_reward_efficiency_conflict" if conflict else (
+        "efficiency_rl" if aligned else "audit_reward_only_variance")
+
+def learning_route(rewards, correctness, epsilon=1e-6, *, efficiency_costs=None):
+    if efficiency_costs is not None and (
+        len(efficiency_costs) != len(rewards) or
+        any(not math.isfinite(float(c)) or c < 0 for c in efficiency_costs)
+    ):
+        raise ValueError("Need aligned finite nonnegative efficiency costs")
+
     if len(rewards) < 2 or len(rewards) != len(correctness):
         raise ValueError("Need aligned rollout groups")
     if not math.isfinite(epsilon) or epsilon <= 0:
@@ -48,7 +73,7 @@ def learning_route(rewards, correctness, epsilon=1e-6):
     rs = float(rewards.std(unbiased=False))
     qs = float(correctness.std(unbiased=False))
     if bool((correctness == 1).all()):
-        return "efficiency_rl" if rs > epsilon else "mastered_replay"
+        return efficiency_route(rewards.tolist(), efficiency_costs, epsilon)
     if qs > epsilon and rs > epsilon:
         return "audit_reward_quality_conflict" if inversions else "rl_ready"
     if qs > epsilon:

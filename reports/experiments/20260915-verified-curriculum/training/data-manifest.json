@@ -1,0 +1,10 @@
+{
+  "single": {
+    "rows": 256,
+    "sha256": "16ea1b3920bea36f004177f7b80079c171c7dbe9e68d0544d1f8081a2092e158"
+  },
+  "mixed": {
+    "rows": 512,
+    "sha256": "12e0a10108b5a34f0691385af2a88d468ecfa4cb98f3b18d4c8e95c097ec40c5"
+  }
+}
