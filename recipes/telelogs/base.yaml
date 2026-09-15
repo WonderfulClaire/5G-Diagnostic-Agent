@@ -1,0 +1,8 @@
+- name: telelogs_rca
+  _target_: recipes.telelogs.AgentEnvLoop
+  env_type: telelogs
+  tool_format: hermes
+  new_evidence_reward: 0.02
+  repeat_tool_penalty: -0.05
+  invalid_tool_penalty: -0.20
+  missing_submission_penalty: -0.50
