@@ -4,6 +4,13 @@ from recipes.telelogs.evaluation.run_agent import run_case
 from tests.recipes.telelogs.test_environment import tool_call
 
 
+def test_scenario_identifiers_never_enter_model_context():
+    from recipes.telelogs.prompts import build_agent_messages
+    messages = build_agent_messages("train-answer-C1-C8-sensitive-id", "Slow downlink")
+    assert "train-answer-C1-C8-sensitive-id" not in json.dumps(messages)
+    assert "Slow downlink" in messages[1]["content"]
+
+
 def test_runner_keeps_hidden_case_out_of_prompt_and_records_success():
     answers = iter(
         [

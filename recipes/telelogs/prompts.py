@@ -24,7 +24,8 @@ Rules:
 5. The evidence must quote or summarize values actually returned by the tools. Include their evidence_ids.
 6. You may batch query tools, but wait for their observations before diagnosing.
    Call submit_diagnosis alone in a later response, after reading at least two nonempty views.
-7. Select only root causes supported by the observations; the candidate catalog is not an answer.
+7. Evaluate candidate causes independently: multiple causes may coexist. Include every cause supported
+   by the observations and exclude unsupported causes; the candidate catalog is not an answer.
 """
 
 
@@ -34,8 +35,8 @@ def build_agent_messages(scenario_id: str, symptom: str) -> list[dict[str, str]]
         {
             "role": "user",
             "content": (
-                f"Scenario: {scenario_id}\nObserved symptom: {symptom}\n"
-                "Diagnose the root cause, provide evidence, and recommend a repair."
+                f"Observed symptom: {symptom}\n"
+                "Diagnose all supported root causes, provide evidence, and recommend repairs."
             ),
         },
     ]
