@@ -1,0 +1,28 @@
+{
+  "samples": 12,
+  "source_groups": 12,
+  "accuracy_delta": 0.0,
+  "delta_ci95": [
+    -0.4166666666666667,
+    0.4166666666666667
+  ],
+  "category_deltas": {
+    "C1,C6": 1.0,
+    "C2,C8": 1.0,
+    "C3,C7": 0.0,
+    "C5,C6": 1.0,
+    "C1": -1.0,
+    "C2": -1.0,
+    "C3": -1.0,
+    "C4": 0.0,
+    "C5": 0.0,
+    "C6": 0.0,
+    "C7": 0.0,
+    "C8": 0.0
+  },
+  "accept": false,
+  "decision": "hold",
+  "seed": 42,
+  "bootstrap": 1000,
+  "metric": "exact_correctness; reward not used for acceptance"
+}

@@ -44,3 +44,16 @@ def test_runner_has_step_budget():
     case = {"id": "fixture", "ground_truth": ["C4"], "case": {"sections": {"radio_kpi": ["SINR -5 dB"]}}}
     row = asyncio.run(run_case(case, lambda messages, schemas: tool_call("query_radio_kpi", {}), max_steps=2))
     assert row["iterations"] == 2 and "step_budget_exhausted" in row["error_categories"]
+
+
+def test_context_does_not_recursively_duplicate_history():
+    snapshots = []
+
+    def backend(messages, schemas):
+        snapshots.append(list(messages))
+        return tool_call("query_radio_kpi", {})
+
+    case = {"id": "fixture", "ground_truth": ["C4"], "case": {"sections": {"radio_kpi": ["SINR -5 dB"]}}}
+    asyncio.run(run_case(case, backend, max_steps=4))
+    assert [len(x) for x in snapshots] == [2, 4, 6, 8]
+    assert all(sum(m["role"] == "system" for m in x) == 1 for x in snapshots)

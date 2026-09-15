@@ -33,3 +33,17 @@ class ReleaseProtocolTest(unittest.IsolatedAsyncioTestCase):
         _, reward, _, info = await self.env.step(Action(text=tool_call("query_radio_kpi", {"ground_truth": True})))
         self.assertLess(reward, 0)
         self.assertEqual(self.env._queried, [])
+
+
+class RecoveryTest(unittest.IsolatedAsyncioTestCase):
+    async def test_truncated_tool_call_can_be_repaired_without_executing_partial_batch(self):
+        env = TeleLogsEnv(case={"sections": {"radio_kpi": ["SINR -5 dB"]}}, ground_truth=["C4"])
+        env.reset()
+        text = tool_call("query_radio_kpi", {}) + '<tool_call>{"name":"query_handover"'
+        _, reward, done, info = await env.step(Action(text=text))
+        self.assertFalse(done)
+        self.assertLess(reward, 0)
+        self.assertEqual(env._queried, [])
+        self.assertEqual(info["tool_calls"][0]["error"], "malformed_tool_call")
+        _, _, done, info = await env.step(Action(text=tool_call("query_radio_kpi", {})))
+        self.assertEqual(info["tool_calls"][0]["record_count"], 1)

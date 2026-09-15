@@ -9,6 +9,12 @@
 - **LoRA + GRPO 训练配置**：环境将分步交互交给 rollout/trainer，配置组采样、KL、LoRA 与训练集/开发集。完整 GPU 训练需要预训练模型及兼容运行时。
 - **分层评测与可审计轨迹**：保存动作、观察、奖励分解和失败类型，报告根因 Exact Match、逐样本集合 F1、Micro F1、工具失败率与平均调用次数。
 
+## 真实模型学习闭环
+
+新增可执行的单卡 LoRA-SFT 与多轮 GRPO 训练器：真实 rollout、回答 token 掩码、冻结参考策略、组内学习信号检查，以及逐组奖励/梯度/KL 日志。数据飞轮读取这些轨迹后，可决定补示范、继续 RL 或审查奖励，再用旧样本回放与 KL 保护做增量回训。
+
+[训练、工具恢复与飞轮联调](docs/LEARNING_LOOP.md) · [实验记录](reports/experiments/20260915/REPORT.md)
+
 ## 本地验证
 
 环境、数据预处理和评测测试可以独立于 GPU 训练依赖运行：
@@ -49,7 +55,7 @@ DATA_DIR=/path/to/data MODEL_PATH=/path/to/model CUDA_VISIBLE_DEVICES=0 \
 
 ## 评测边界
 
-工具协议通过不等于诊断能力提升。当前公开版新增的测试验证实现正确性，没有新增经过独立测试集确认的 GRPO 提升数字。奖励中的证据/修复匹配含启发式成分，仍可能被模型迎合；请同时检查 evidence ID、原始观察和独立判分。`macro_f1` 保留为旧字段别名，准确名称是 `mean_sample_set_f1`，不是按类别平均的 Macro F1。
+工具协议通过不等于诊断能力提升。已完成小模型的合成数据 GPU 实验，详情见实验记录；目前没有经过独立业务测试集确认的 GRPO 提升数字。奖励中的证据/修复匹配含启发式成分，仍可能被模型迎合；请同时检查 evidence ID、原始观察和独立判分。`macro_f1` 保留为旧字段别名，准确名称是 `mean_sample_set_f1`，不是按类别平均的 Macro F1。
 
 [实验协议](docs/EXPERIMENT_PROTOCOL.md) · [本次验证记录](reports/release_validation.md) · [代码来源与许可](THIRD_PARTY_NOTICES.md)
 

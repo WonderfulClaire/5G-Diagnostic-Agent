@@ -55,9 +55,9 @@ async def run_case(case, backend, max_steps=8):
         count += len(calls)
         failures += sum(bool(c.get("error")) for c in calls)
         trace.append({"step": step, "action": text, "observation": obs.messages, "reward": reward, "info": info})
-        messages.append({"role": "assistant", "content": text})
-        # Keep API tool IDs out of the transcript: serialized observations use ordinary user messages.
-        messages.append({"role": "user", "content": json.dumps(obs.messages, ensure_ascii=False)})
+        # The environment already returns the complete conversation. Replacing it
+        # prevents recursively embedding all earlier messages in each observation.
+        messages = list(obs.messages)
         for call in calls:
             if "predicted_root_causes" in call:
                 submitted = call
@@ -89,12 +89,20 @@ def main():
     p.add_argument("cases", type=Path)
     p.add_argument("--base-url", default="http://localhost:8000/v1")
     p.add_argument("--model", required=True)
+    p.add_argument("--local", action="store_true", help="Interpret --model as a local Transformers checkpoint")
+    p.add_argument("--device", default="cuda:0")
+    p.add_argument("--adapter")
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--max-steps", type=int, default=8)
     a = p.parse_args()
     if a.max_steps < 1:
         raise ValueError("max-steps must be positive")
-    backend = ChatBackend(a.base_url, a.model)
+    if a.local:
+        from .local_model import LocalModelBackend
+
+        backend = LocalModelBackend(a.model, device=a.device, adapter=a.adapter)
+    else:
+        backend = ChatBackend(a.base_url, a.model)
     rows = [
         asyncio.run(run_case(json.loads(line), backend, a.max_steps))
         for line in a.cases.read_text().splitlines()

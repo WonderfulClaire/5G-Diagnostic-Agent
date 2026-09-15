@@ -1,0 +1,6 @@
+# Version combination exercised on the lab CUDA host.
+torch==2.6.0
+transformers==4.51.3
+peft==0.15.2
+accelerate==1.6.0
+-r requirements-test.txt

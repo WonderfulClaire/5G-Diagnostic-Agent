@@ -557,6 +557,20 @@ class TeleLogsEnv(AgentEnv):
             raise RuntimeError("Episode ended; call reset before another step")
         _, calls = self.format_wrapper.parse_response(action.text)
         self._messages.append({"role": "assistant", "content": action.text})
+        opening = action.text.count("<tool_call>")
+        closing = action.text.count("</tool_call>")
+        if (opening or closing) and (opening != closing or len(calls) != opening):
+            error = "malformed_tool_call"
+            message = json.dumps(
+                {
+                    "error": error,
+                    "hint": "Return complete tool_call blocks with valid JSON. No partial batch was executed.",
+                }
+            )
+            self._messages.append({"role": "user", "content": self.format_wrapper.format_observation(message)})
+            info = {"tool_calls": [{"tool": "parse", "error": error}], "query_count": len(self._queried)}
+            self.last_info = info
+            return Observation(messages=list(self._messages)), self.invalid_tool_penalty, False, info
         if not calls:
             info = {
                 "error": "missing_submit_diagnosis",

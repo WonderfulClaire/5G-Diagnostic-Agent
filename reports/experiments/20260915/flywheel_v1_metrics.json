@@ -1,0 +1,15 @@
+{
+  "samples": 12,
+  "exact_match": 0.5,
+  "mean_sample_set_f1": 0.611111111111111,
+  "macro_f1": 0.611111111111111,
+  "micro_f1": 0.7272727272727272,
+  "avg_tool_calls": 6.916666666666667,
+  "tool_call_failure_rate": 0.0,
+  "avg_iterations": 2.0,
+  "accuracy_per_tool_call": 0.07228915662650602,
+  "suite_macro_f1": {
+    "synthetic_compound_dev": 1.0,
+    "synthetic_dev": 0.41666666666666663
+  }
+}
