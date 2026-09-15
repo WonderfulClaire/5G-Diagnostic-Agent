@@ -17,6 +17,8 @@
 
 后续可复核对照：[根因字段加权](reports/experiments/20260915-retention/REPORT.md) · [0.6B/1.7B容量与回训](reports/experiments/20260915-capacity/REPORT.md)。同时检查总准确率、单/多根因保留与工具错误；当前回训候选未通过验收，32条预先冻结测试仍未评测。
 
+[成对难负例与决策学习](reports/experiments/20260915-decision/REPORT.md)进一步对照决策SFT与SFT+DPO：DPO组合保留了8/8单故障，但双故障仍0/4，总正确数未超过初始模型，尚未通过版本验收。
+
 ## 本地验证
 
 环境、数据预处理和评测测试可以独立于 GPU 训练依赖运行：

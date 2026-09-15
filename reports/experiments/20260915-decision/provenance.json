@@ -1,0 +1,7 @@
+{
+  "agent_source_commit": "ec33f34",
+  "flywheel_source_commit": "0ba3ef6",
+  "base_model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "initial_adapter_sha256": "40b8e49323de1d490cc4c6abedef81c22958568b511ffb8fb4283943098e438a",
+  "test_evaluated": false
+}

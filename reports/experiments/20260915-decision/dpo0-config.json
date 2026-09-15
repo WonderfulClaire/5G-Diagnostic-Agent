@@ -1,0 +1,12 @@
+{
+  "seed": 42,
+  "steps": 100,
+  "lr": 1e-05,
+  "beta": 0.1,
+  "dpo_weight": 0.0,
+  "sft_weight": 1,
+  "data_sha256": "6561d9aad36832b997861a9ba88be80898ca8ab9813ec9c4b6357ab99962abd7",
+  "schedule": "4 single-cause decisions to 1 compound decision",
+  "samples": 40,
+  "scope": "synthetic decision learning; full tool generation evaluated separately"
+}
