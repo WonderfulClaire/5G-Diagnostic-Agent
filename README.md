@@ -15,6 +15,8 @@
 
 [训练、工具恢复与飞轮联调](docs/LEARNING_LOOP.md) · [实验记录](reports/experiments/20260915/REPORT.md)
 
+后续可复核对照：[根因字段加权](reports/experiments/20260915-retention/REPORT.md) · [0.6B/1.7B容量与回训](reports/experiments/20260915-capacity/REPORT.md)。同时检查总准确率、单/多根因保留与工具错误；当前回训候选未通过验收，32条预先冻结测试仍未评测。
+
 ## 本地验证
 
 环境、数据预处理和评测测试可以独立于 GPU 训练依赖运行：

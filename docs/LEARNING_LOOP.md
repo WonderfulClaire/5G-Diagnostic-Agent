@@ -56,3 +56,7 @@ python -m recipes.telelogs.training.supervised curated_train.jsonl \
 数据混合比例本身不能保证旧能力不退化。是否接受回训版本，要看固定评测里的新问题修复、旧类别退化与统计不确定性，不能只看训练 loss。
 
 [本次实验记录](../reports/experiments/20260915/REPORT.md) 保留失败结果、实现版本边界和后续决策。
+
+后续增加奖励与正确性排序检查：若更差回答反而获得更高奖励，返回 `audit_reward_quality_conflict` 并跳过该组更新。它是保守的分流规则，质量标签不可靠时仍可能误判，不能替代奖励审核。当前小型轨迹回放没有触发新增分支，尚无训练收益证据。
+
+[`--diagnosis-weight` 单变量实验](../reports/experiments/20260915-retention/REPORT.md)只加权生成回答中的根因数组，保留其余字段监督。权重8与权重1均为8/12、单根因均5/8，未胜过对照且未保住原模型6/8的单根因能力，因此未采用；32条新测试保持封存。

@@ -1,0 +1,17 @@
+{
+  "source_commit": "15f8707",
+  "input_sha256": {
+    "train": "08fa13846d3bdc71e6e78c095d702fce794c18d297488694a53a7b9ab0e101be",
+    "dev": "494f3aef2e58e84902b16f64feed5a76202d25f736581415299dfb7c7b5adcef",
+    "initial_adapter": "785d483d950438f7373196844cc6a0d641796ea17b40e1745eba55d2d5e9489c",
+    "base/model.safetensors": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b"
+  },
+  "packages": {
+    "torch": "2.6.0+cu124",
+    "transformers": "4.51.3",
+    "peft": "0.15.2",
+    "accelerate": "1.6.0"
+  },
+  "frozen_test_sha256": "b769963f13c1e444c3da3f402e3ed9b20e8ee2f559441b534d5590900f71b79e",
+  "test_evaluated": false
+}

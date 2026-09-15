@@ -24,6 +24,18 @@ def test_proxy_only_variance_is_not_a_quality_learning_signal():
     assert learning_route([0.1, 0.9], [0, 1]) == "rl_ready"
 
 
+def test_reward_that_prefers_wrong_answers_is_quarantined():
+    from recipes.telelogs.training.objective import learning_route
+    import pytest
+
+    assert learning_route([0.9, 0.1], [0, 1]) == "audit_reward_quality_conflict"
+    assert learning_route([0, .9, .8], [0, .5, 1]) == "audit_reward_quality_conflict"
+    assert learning_route([.5, .5, .9], [0, .5, 1]) == "rl_ready"
+    for rewards, quality in (([1], [1]), ([0, 1], [0]), ([0, float('nan')], [0, 1]), ([0, 1], [0, 2])):
+        with pytest.raises(ValueError):
+            learning_route(rewards, quality)
+
+
 def test_only_response_positions_contribute_to_training_loss():
     from types import SimpleNamespace
     from recipes.telelogs.training.online_grpo import log_probs

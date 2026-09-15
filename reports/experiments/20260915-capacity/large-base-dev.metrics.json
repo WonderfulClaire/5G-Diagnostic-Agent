@@ -1,0 +1,31 @@
+{
+  "samples": 12,
+  "exact_match": 0.25,
+  "mean_sample_set_f1": 0.4222222222222222,
+  "macro_f1": 0.4222222222222222,
+  "micro_f1": 0.4210526315789474,
+  "avg_tool_calls": 6.5,
+  "tool_call_failure_rate": 0.0,
+  "avg_iterations": 4.5,
+  "accuracy_per_tool_call": 0.038461538461538464,
+  "suite_macro_f1": {
+    "synthetic_compound_dev": 0.6,
+    "synthetic_dev": 0.3333333333333333
+  },
+  "by_root_cause_count": {
+    "1": {
+      "samples": 8,
+      "exact_match": 0.25,
+      "mean_sample_set_f1": 0.3333333333333333,
+      "overprediction_rate": 0.5,
+      "underprediction_rate": 0.0
+    },
+    "2": {
+      "samples": 4,
+      "exact_match": 0.25,
+      "mean_sample_set_f1": 0.6,
+      "overprediction_rate": 0.25,
+      "underprediction_rate": 0.0
+    }
+  }
+}

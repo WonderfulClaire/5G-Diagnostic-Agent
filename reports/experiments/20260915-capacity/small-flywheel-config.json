@@ -1,0 +1,12 @@
+{
+  "seed": 42,
+  "init_adapter": "capacity-small/sft/adapter",
+  "lr": 2e-05,
+  "replay_kl": 0.2,
+  "diagnosis_weight": 1.0,
+  "schedule": "four replay steps per new-data step",
+  "steps": 100,
+  "examples": 80,
+  "data_sha256": "08fa13846d3bdc71e6e78c095d702fce794c18d297488694a53a7b9ab0e101be",
+  "scope": "synthetic executable demonstration cold start"
+}

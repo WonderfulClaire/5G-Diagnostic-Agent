@@ -1,0 +1,78 @@
+{
+  "1": {
+    "steps": 100,
+    "new_steps": 20,
+    "response_tokens": 10537,
+    "weighted_tokens": 0,
+    "max_replay_kl": 0.017383890226483345,
+    "dev": {
+      "samples": 12,
+      "exact_match": 0.6666666666666666,
+      "mean_sample_set_f1": 0.7777777777777778,
+      "macro_f1": 0.7777777777777778,
+      "micro_f1": 0.8125,
+      "avg_tool_calls": 7.083333333333333,
+      "tool_call_failure_rate": 0.011764705882352941,
+      "avg_iterations": 2.0833333333333335,
+      "accuracy_per_tool_call": 0.09411764705882353,
+      "suite_macro_f1": {
+        "synthetic_compound_dev": 0.9166666666666666,
+        "synthetic_dev": 0.7083333333333334
+      },
+      "by_root_cause_count": {
+        "1": {
+          "samples": 8,
+          "exact_match": 0.625,
+          "mean_sample_set_f1": 0.7083333333333334,
+          "overprediction_rate": 0.125,
+          "underprediction_rate": 0.0
+        },
+        "2": {
+          "samples": 4,
+          "exact_match": 0.75,
+          "mean_sample_set_f1": 0.9166666666666666,
+          "overprediction_rate": 0.0,
+          "underprediction_rate": 0.25
+        }
+      }
+    }
+  },
+  "8": {
+    "steps": 100,
+    "new_steps": 20,
+    "response_tokens": 10537,
+    "weighted_tokens": 236,
+    "max_replay_kl": 0.015324353240430355,
+    "dev": {
+      "samples": 12,
+      "exact_match": 0.6666666666666666,
+      "mean_sample_set_f1": 0.7777777777777778,
+      "macro_f1": 0.7777777777777778,
+      "micro_f1": 0.787878787878788,
+      "avg_tool_calls": 7.0,
+      "tool_call_failure_rate": 0.0,
+      "avg_iterations": 2.0,
+      "accuracy_per_tool_call": 0.09523809523809523,
+      "suite_macro_f1": {
+        "synthetic_compound_dev": 0.9166666666666666,
+        "synthetic_dev": 0.7083333333333334
+      },
+      "by_root_cause_count": {
+        "1": {
+          "samples": 8,
+          "exact_match": 0.625,
+          "mean_sample_set_f1": 0.7083333333333334,
+          "overprediction_rate": 0.25,
+          "underprediction_rate": 0.0
+        },
+        "2": {
+          "samples": 4,
+          "exact_match": 0.75,
+          "mean_sample_set_f1": 0.9166666666666666,
+          "overprediction_rate": 0.0,
+          "underprediction_rate": 0.25
+        }
+      }
+    }
+  }
+}

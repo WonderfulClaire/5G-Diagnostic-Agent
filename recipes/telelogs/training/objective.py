@@ -1,5 +1,6 @@
 """GRPO objective for action tokens only; observations are context, never targets."""
 
+import math
 import torch
 
 
@@ -26,6 +27,22 @@ def action_loss(new_logp, old_logp, reference_logp, advantage, clip=0.2, beta=0.
 
 
 def learning_route(rewards, correctness, epsilon=1e-6):
+    if len(rewards) < 2 or len(rewards) != len(correctness):
+        raise ValueError("Need aligned rollout groups")
+    if not math.isfinite(epsilon) or epsilon <= 0:
+        raise ValueError("epsilon must be finite and positive")
+    if any(not math.isfinite(float(x)) for x in [*rewards, *correctness]):
+        raise ValueError("Nonfinite rollout scores")
+    if any(not 0 <= x <= 1 for x in correctness):
+        raise ValueError("Correctness must be between 0 and 1")
+    # Reward variance alone can actively teach worse decisions. Reject a group
+    # if any resolvable quality ordering is reversed by the optimization reward.
+    inversions = any(
+        abs(correctness[i] - correctness[j]) > epsilon
+        and abs(rewards[i] - rewards[j]) > epsilon
+        and (correctness[i] - correctness[j]) * (rewards[i] - rewards[j]) < 0
+        for i in range(len(rewards)) for j in range(i)
+    )
     rewards = torch.tensor(rewards, dtype=torch.float32)
     correctness = torch.tensor(correctness, dtype=torch.float32)
     rs = float(rewards.std(unbiased=False))
@@ -33,7 +50,7 @@ def learning_route(rewards, correctness, epsilon=1e-6):
     if bool((correctness == 1).all()):
         return "efficiency_rl" if rs > epsilon else "mastered_replay"
     if qs > epsilon and rs > epsilon:
-        return "rl_ready"
+        return "audit_reward_quality_conflict" if inversions else "rl_ready"
     if qs > epsilon:
         return "repair_reward_resolution"
     return "audit_reward_only_variance" if rs > epsilon else "teacher_or_sft_repair"

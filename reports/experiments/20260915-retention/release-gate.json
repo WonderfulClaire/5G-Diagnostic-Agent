@@ -1,0 +1,49 @@
+{
+  "samples": 12,
+  "source_groups": 12,
+  "accuracy_delta": 0.16666666666666666,
+  "delta_ci95": [
+    -0.08333333333333333,
+    0.5
+  ],
+  "category_deltas": {
+    "('C1', 'C6')": 1.0,
+    "('C2', 'C8')": 1.0,
+    "('C3', 'C7')": 0.0,
+    "('C5', 'C6')": 1.0,
+    "('C1',)": 0.0,
+    "('C2',)": 0.0,
+    "('C3',)": -1.0,
+    "('C4',)": 0.0,
+    "('C5',)": 0.0,
+    "('C6',)": 0.0,
+    "('C7',)": 0.0,
+    "('C8',)": 0.0
+  },
+  "accept": false,
+  "decision": "hold",
+  "seed": 42,
+  "bootstrap": 1000,
+  "metric": "exact_correctness; reward not used for acceptance",
+  "statistical_gate_passed": false,
+  "by_root_cause_count": {
+    "1": {
+      "baseline": 0.75,
+      "challenger": 0.625,
+      "samples": 8
+    },
+    "2": {
+      "baseline": 0.0,
+      "challenger": 0.75,
+      "samples": 4
+    }
+  },
+  "no_cardinality_regression": false,
+  "tool_failures": {
+    "baseline": 0,
+    "challenger": 0
+  },
+  "no_protocol_regression": true,
+  "test_split_only": false,
+  "scope": "A test split label alone does not establish real-world validity or absence of prior tuning."
+}
