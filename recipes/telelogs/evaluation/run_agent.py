@@ -13,6 +13,11 @@ from agent_r1.env.base import Action
 from recipes.telelogs.env.telelogs_env import TeleLogsEnv
 from recipes.telelogs.prompts import build_agent_messages
 from recipes.telelogs.evaluation.evaluate_predictions import evaluate_rows
+from recipes.telelogs.evaluation.harness_variants import (
+    alias_tool_schemas,
+    available_variants,
+    canonicalize_tool_call_text,
+)
 
 
 class ChatBackend:
@@ -39,7 +44,7 @@ class ChatBackend:
         return msg.get("content") or ""
 
 
-async def run_case(case, backend, max_steps=8):
+async def run_case(case, backend, max_steps=8, harness_variant="canonical"):
     env = TeleLogsEnv(case=case["case"], ground_truth=case["ground_truth"])
     messages = build_agent_messages(case["id"], case.get("symptom", "Downlink throughput is below 600 Mbps."))
     env.reset(raw_prompt=messages)
@@ -49,12 +54,23 @@ async def run_case(case, backend, max_steps=8):
     failures = 0
     count = 0
     for step in range(max_steps):
-        text = await asyncio.to_thread(backend, messages, env.tool_schemas)
+        model_schemas = alias_tool_schemas(env.tool_schemas, harness_variant)
+        raw_text = await asyncio.to_thread(backend, messages, model_schemas)
+        text = canonicalize_tool_call_text(raw_text, harness_variant)
         obs, reward, done, info = await env.step(Action(text=text))
         calls = info.get("tool_calls", [])
         count += len(calls)
         failures += sum(bool(c.get("error")) for c in calls)
-        trace.append({"step": step, "action": text, "observation": obs.messages, "reward": reward, "info": info})
+        trace.append(
+            {
+                "step": step,
+                "raw_action": raw_text,
+                "action": text,
+                "observation": obs.messages,
+                "reward": reward,
+                "info": info,
+            }
+        )
         # The environment already returns the complete conversation. Replacing it
         # prevents recursively embedding all earlier messages in each observation.
         messages = list(obs.messages)
@@ -73,6 +89,7 @@ async def run_case(case, backend, max_steps=8):
         error.append("root_cause_error")
     return {
         "scenario_id": case["id"],
+        "harness_variant": harness_variant,
         "split": case.get("split", "unknown"),
         "ground_truth": case["ground_truth"],
         "predicted_root_causes": predicted,
@@ -94,6 +111,7 @@ def main():
     p.add_argument("--adapter")
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--max-steps", type=int, default=8)
+    p.add_argument("--harness-variant", choices=available_variants(), default="canonical")
     a = p.parse_args()
     if a.max_steps < 1:
         raise ValueError("max-steps must be positive")
@@ -104,7 +122,7 @@ def main():
     else:
         backend = ChatBackend(a.base_url, a.model)
     rows = [
-        asyncio.run(run_case(json.loads(line), backend, a.max_steps))
+        asyncio.run(run_case(json.loads(line), backend, a.max_steps, a.harness_variant))
         for line in a.cases.read_text().splitlines()
         if line.strip()
     ]
