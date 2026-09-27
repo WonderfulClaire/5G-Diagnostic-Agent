@@ -75,8 +75,9 @@ def canonicalize_tool_call_text(text: str, variant: str) -> str:
         except json.JSONDecodeError:
             return match.group(0)
         name = payload.get("name")
-        if name in reverse:
-            payload["name"] = reverse[name]
+        if name not in reverse:
+            return match.group(0)
+        payload["name"] = reverse[name]
         return "<tool_call>" + json.dumps(payload, ensure_ascii=False) + "</tool_call>"
 
     return _BLOCK_RE.sub(replace, text)
