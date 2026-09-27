@@ -9,7 +9,7 @@
 - **查询—观察—提交协议**：完整案例在环境侧保存；模型只看到问题和工具返回。至少观察两个非空视角才能提交，查询与最终提交必须分轮执行。
 - **证据增量与调用成本**：记录内容哈希和 evidence ID；奖励新增记录，惩罚重复查询、非法调用，并对每次查询收取成本。相同工具返回新记录仍可获得信息增量奖励。
 - **LoRA + GRPO 训练配置**：环境将分步交互交给 rollout/trainer，配置组采样、KL、LoRA 与训练集/开发集。完整 GPU 训练需要预训练模型及兼容运行时。
-- **分层评测与可审计轨迹**：保存动作、观察、奖励分解和失败类型，报告根因 Exact Match、逐样本集合 F1、Micro F1、工具失败率与平均调用次数。
+- **分层评测与可审计轨迹**：保存动作、观察、奖励分解和失败类型，报告根因 Exact Match、逐样本集合 F1、Micro F1、工具失败率与平均调用次数；新增 reward-alignment audit，可离线重算每个 GRPO group 的学习路由并检查是否发生不该发生的 optimizer update。
 - **Harness generalization**：评测端支持 canonical / compact / alternate 三套语义等价的查询工具 schema；alias 在进入环境前映射回 canonical，并同时保存 raw/canonical action，用于区分任务能力与工具接口过拟合。
 
 ## 真实模型学习闭环
@@ -68,6 +68,14 @@ DATA_DIR=/path/to/data MODEL_PATH=/path/to/model CUDA_VISIBLE_DEVICES=0 \
 ## 评测边界
 
 工具协议通过不等于诊断能力提升。已完成小模型的合成数据 GPU 实验，详情见实验记录；目前没有经过独立业务测试集确认的 GRPO 提升数字。奖励中的证据/修复匹配含启发式成分，仍可能被模型迎合；请同时检查 evidence ID、原始观察和独立判分。`macro_f1` 保留为旧字段别名，准确名称是 `mean_sample_set_f1`，不是按类别平均的 Macro F1。
+
+Reward 对齐审计：
+
+```bash
+python -m scripts.telelogs.audit_reward_alignment runs/grpo/metrics.jsonl --strict
+```
+
+它会用保存的 reward / correctness / efficiency cost 重新计算 learning route，并检查 route mismatch、reward-quality conflict 下误更新、以及本该更新却跳过的 group。这个工具不证明 reward 本身正确，但能防止“日志里已经显示冲突，训练器却还是更新了”这类可审计错误。
 
 [实验协议](docs/EXPERIMENT_PROTOCOL.md) · [Harness generalization](docs/HARNESS_GENERALIZATION.md) · [本次验证记录](reports/release_validation.md) · [代码来源与许可](THIRD_PARTY_NOTICES.md)
 
