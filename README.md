@@ -69,6 +69,8 @@ DATA_DIR=/path/to/data MODEL_PATH=/path/to/model CUDA_VISIBLE_DEVICES=0 \
 
 工具协议通过不等于诊断能力提升。已完成小模型的合成数据 GPU 实验，详情见实验记录；目前没有经过独立业务测试集确认的 GRPO 提升数字。奖励中的证据/修复匹配含启发式成分，仍可能被模型迎合；请同时检查 evidence ID、原始观察和独立判分。`macro_f1` 保留为旧字段别名，准确名称是 `mean_sample_set_f1`，不是按类别平均的 Macro F1。
 
+Checkpoint 对照现在也会给出同一验证样本上的 paired-bootstrap 95% CI，避免只展示单个 delta；详见 [实验协议](docs/EXPERIMENT_PROTOCOL.md)。
+
 Reward 对齐审计：
 
 ```bash

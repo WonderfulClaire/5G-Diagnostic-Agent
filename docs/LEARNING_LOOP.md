@@ -60,3 +60,17 @@ python -m recipes.telelogs.training.supervised curated_train.jsonl \
 后续增加奖励与正确性排序检查：若更差回答反而获得更高奖励，返回 `audit_reward_quality_conflict` 并跳过该组更新。它是保守的分流规则，质量标签不可靠时仍可能误判，不能替代奖励审核。当前小型轨迹回放没有触发新增分支，尚无训练收益证据。
 
 [`--diagnosis-weight` 单变量实验](../reports/experiments/20260915-retention/REPORT.md)只加权生成回答中的根因数组，保留其余字段监督。权重8与权重1均为8/12、单根因均5/8，未胜过对照且未保住原模型6/8的单根因能力，因此未采用；32条新测试保持封存。
+
+
+## Checkpoint comparison with uncertainty
+
+When validation dumps are available at step 0 and a later checkpoint, use the paired reporter instead of quoting only a point estimate:
+
+```bash
+python -m recipes.telelogs.evaluation.summarize_validation \
+  --input runs/validation \
+  --baseline-step 0 \
+  --final-step 300
+```
+
+The reporter pairs the same held-out cases across checkpoints and writes a 95% bootstrap interval for each reported delta. New validation dumps include a stable case key; historical dumps are paired by a deterministic hash of the immutable input and ground truth.

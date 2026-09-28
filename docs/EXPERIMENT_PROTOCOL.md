@@ -25,3 +25,21 @@ The audit recomputes `learning_route` from the saved reward, correctness and eff
 - malformed or non-finite records.
 
 This is a training-integrity check, not a substitute for independent reward validation. A reward can still be consistently wrong; the audit only verifies that the trainer respected its own routing contract.
+
+
+## Paired checkpoint uncertainty
+
+Validation reports now support a deterministic paired bootstrap over the same held-out cases. The trainer persists a checkpoint-stable `case_key` derived from immutable validation input + ground truth, and the summarizer can reconstruct the same key for older dumps.
+
+```bash
+python -m recipes.telelogs.evaluation.summarize_validation \
+  --input runs/validation \
+  --baseline-step 0 \
+  --final-step 300 \
+  --bootstrap-resamples 2000 \
+  --bootstrap-seed 0
+```
+
+The report gives the baseline, final checkpoint, observed delta, and a 95% paired-bootstrap interval for exact match, sample-set F1, micro F1, reward, query cost, tool-failure rate, submission rate, and evidence-related metrics.
+
+The interval is descriptive uncertainty on this fixed validation set. It does not replace multi-seed training runs, and it should not be treated as evidence for a different dataset or deployment population.
