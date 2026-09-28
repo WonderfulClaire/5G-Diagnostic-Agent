@@ -16,6 +16,7 @@ PPO Trainer with Ray-based single controller.
 This trainer supports model-agonistic model initialization with huggingface
 """
 
+import hashlib
 import json
 import math
 import os
@@ -183,8 +184,15 @@ def build_trajectory_dump_entries(
         steps = sorted(grouped_steps[trajectory_uid], key=lambda item: item["step_index"])
         first_step = steps[0]
         last_step = steps[-1]
+        case_payload = json.dumps(
+            {"input": first_step["input"], "gts": first_step["gts"]},
+            sort_keys=True,
+            ensure_ascii=False,
+            default=str,
+        )
         entry = {
             "trajectory_uid": trajectory_uid,
+            "case_key": hashlib.sha256(case_payload.encode("utf-8")).hexdigest(),
             "input": first_step["input"],
             "output": last_step["output"],
             "gts": first_step["gts"],
