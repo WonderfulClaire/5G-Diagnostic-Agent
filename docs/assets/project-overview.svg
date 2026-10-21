@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="850" viewBox="0 0 1600 850" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">5G Diagnostic Agent — Evidence-guided diagnosis</title>
+  <desc id="desc">问题进入查询与观察的多轮工具循环，形成可追溯证据，再输出诊断与修复建议。学习与评测包含 LoRA SFT、GRPO、奖励对齐审计及冻结测试评价。</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1600" y2="850" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0C192E"/><stop offset="1" stop-color="#101329"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="70" y1="0" x2="1530" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#62E6DD"/><stop offset="1" stop-color="#A996FF"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 8 5 1 9" stroke="#6E849F" stroke-width="1.4" fill="none"/>
+    </marker>
+    <marker id="loop-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1 1 8 5 1 9" stroke="#62E6DD" stroke-width="1.5" fill="none"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="850" rx="30" fill="url(#background)"/>
+  <rect x="1" y="1" width="1598" height="848" rx="29" stroke="#28374E"/>
+  <path d="M70 1H1530" stroke="url(#accent)" stroke-width="3"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK SC', 'PingFang SC', sans-serif">
+    <text x="70" y="77" fill="#62E6DD" font-size="18" font-weight="600" letter-spacing="3">EVIDENCE-GUIDED · MULTI-TURN DIAGNOSIS</text>
+    <text x="70" y="143" fill="#F5F8FF" font-size="48" font-weight="700" letter-spacing="-1">5G Diagnostic Agent</text>
+    <text x="70" y="186" fill="#AABBD1" font-size="23">从吞吐异常，到有证据支持的根因与修复建议</text>
+    <g transform="translate(1390 70)" stroke="#62E6DD" stroke-linecap="round" stroke-width="2.3">
+      <circle cx="45" cy="45" r="6" fill="#62E6DD" stroke="none"/>
+      <path d="M45 59V100M25 100H65M30 30A22 22 0 0 0 30 60M60 30A22 22 0 0 1 60 60M17 17A40 40 0 0 0 17 73M73 17A40 40 0 0 1 73 73"/>
+    </g>
+    <path d="M70 224H1530" stroke="#26364D"/>
+    <text x="70" y="267" fill="#8297B3" font-size="16" font-weight="600" letter-spacing="2">01 / DIAGNOSIS LOOP</text>
+
+    <rect x="70" y="295" width="245" height="220" rx="17" fill="#132239" stroke="#30415A"/>
+    <rect x="96" y="322" width="38" height="30" rx="8" fill="#22374B"/>
+    <text x="115" y="343" fill="#8FEDE6" font-size="16" text-anchor="middle">01</text>
+    <text x="96" y="391" fill="#F5F8FF" font-size="29" font-weight="650">问题</text>
+    <text x="96" y="426" fill="#9BB0CA" font-size="18">5G 下行吞吐异常</text>
+    <text x="96" y="479" fill="#7189A8" font-size="15">Symptom → request</text>
+
+    <path d="M326 405H364" stroke="#6E849F" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="380" y="295" width="440" height="220" rx="17" fill="#102A36" stroke="#33716F"/>
+    <text x="408" y="340" fill="#76E7DF" font-size="17" font-weight="600" letter-spacing="1">02 / TOOL LOOP</text>
+    <text x="408" y="382" fill="#F5F8FF" font-size="28" font-weight="650">查询</text>
+    <text x="648" y="382" fill="#F5F8FF" font-size="28" font-weight="650">观察</text>
+    <path d="M478 374H624" stroke="#62E6DD" stroke-width="2" marker-end="url(#loop-arrow)"/>
+    <path d="M699 395V419Q699 431 687 431H447Q435 431 435 419V397" stroke="#62E6DD" stroke-width="1.8" marker-end="url(#loop-arrow)"/>
+    <text x="408" y="478" fill="#9BBDBF" font-size="17">按需取证 · 至少两个非空观察视角</text>
+
+    <path d="M831 405H869" stroke="#6E849F" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="885" y="295" width="275" height="220" rx="17" fill="#1D243F" stroke="#5B5284"/>
+    <rect x="911" y="322" width="38" height="30" rx="8" fill="#343150"/>
+    <text x="930" y="343" fill="#BEAEFF" font-size="16" text-anchor="middle">03</text>
+    <text x="911" y="391" fill="#F5F8FF" font-size="29" font-weight="650">证据</text>
+    <text x="911" y="426" fill="#B2ABCC" font-size="18">Evidence ID · 内容哈希</text>
+    <text x="911" y="479" fill="#8D86AD" font-size="15">Traceable observations</text>
+
+    <path d="M1171 405H1209" stroke="#6E849F" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="1225" y="295" width="305" height="220" rx="17" fill="#1B243B" stroke="#414D6C"/>
+    <rect x="1251" y="322" width="38" height="30" rx="8" fill="#30344F"/>
+    <text x="1270" y="343" fill="#C5BBF6" font-size="16" text-anchor="middle">04</text>
+    <text x="1251" y="391" fill="#F5F8FF" font-size="29" font-weight="650">诊断与修复建议</text>
+    <text x="1251" y="426" fill="#AEB6CE" font-size="18">根因 · 证据引用 · 修复动作</text>
+    <text x="1251" y="479" fill="#848FAC" font-size="15">Grounded submission</text>
+
+    <text x="70" y="578" fill="#8297B3" font-size="16" font-weight="600" letter-spacing="2">02 / LEARNING &amp; EVALUATION</text>
+    <rect x="70" y="606" width="460" height="164" rx="16" fill="#122136" stroke="#2B3D56"/>
+    <circle cx="105" cy="641" r="5" fill="#62E6DD"/>
+    <text x="125" y="649" fill="#F5F8FF" font-size="24" font-weight="600">LoRA SFT / GRPO</text>
+    <text x="96" y="692" fill="#A2B4CE" font-size="18">真实 rollout · 回答 token 掩码</text>
+    <text x="96" y="727" fill="#7E94B2" font-size="17">冻结参考策略 · 组内学习信号检查</text>
+    <rect x="552" y="606" width="460" height="164" rx="16" fill="#192238" stroke="#3D3A5B"/>
+    <circle cx="587" cy="641" r="5" fill="#B29AFF"/>
+    <text x="607" y="649" fill="#F5F8FF" font-size="24" font-weight="600">Reward alignment audit</text>
+    <text x="578" y="692" fill="#B1B0CC" font-size="18">离线重算 learning route</text>
+    <text x="578" y="727" fill="#8E91AE" font-size="17">核对奖励冲突与 optimizer update</text>
+    <rect x="1034" y="606" width="496" height="164" rx="16" fill="#152337" stroke="#2D425D"/>
+    <circle cx="1069" cy="641" r="5" fill="#92B8EF"/>
+    <text x="1089" y="649" fill="#F5F8FF" font-size="24" font-weight="600">Held-out evaluation</text>
+    <text x="1060" y="692" fill="#A2B4CE" font-size="18">冻结测试 · 根因与集合指标</text>
+    <text x="1060" y="727" fill="#7E94B2" font-size="17">工具调用成本 · 配对 bootstrap 95% CI</text>
+    <text x="70" y="815" fill="#607794" font-size="14" letter-spacing="1">OBSERVE → REASON → VERIFY</text>
+    <text x="1530" y="815" fill="#607794" font-size="14" text-anchor="end">5G · TOOL USE · AUDITABLE LEARNING</text>
+  </g>
+</svg>
